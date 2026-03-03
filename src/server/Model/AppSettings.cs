@@ -66,9 +66,9 @@ namespace Model
             'i',
             "ignored-message-types",
             Required = false,
-            Separator = ',',
+            Separator = '|',
             Default = new string[] { "Refreshed TokenBlacklistCache", "Refreshed InvalidatedTokenCache", "Refreshed ServerState" },
-            HelpText = "Log entry MessageTemplate types to ignore, delimited by ','."
+            HelpText = "Log entry MessageTemplate types to ignore, delimited by '|'."
         )]
         public IEnumerable<string> IgnoredTypes { get; set; }
 
