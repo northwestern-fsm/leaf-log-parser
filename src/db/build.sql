@@ -1,3 +1,6 @@
+USE [LeafLogDB]
+GO
+
 /****** Object:  Table [dbo].[UsageLog]    Script Date: 11/22/2019 11:12:37 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -40,7 +43,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_DatasetQuery] AS
+CREATE OR ALTER VIEW [dbo].[v_DatasetQuery] AS
 
 WITH X AS
 (
@@ -156,7 +159,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_CountQuery] AS
+CREATE OR ALTER VIEW [dbo].[v_CountQuery] AS
 
 WITH X AS
 (
@@ -171,6 +174,7 @@ WITH X AS
 	  , L.[SessionId]
 	  , L.[SourceContext]
 	  , L.[User]
+      , [QueryDTO] = JSON_QUERY(L.Properties, '$.DTO')
 	FROM [dbo].[UsageLog] AS L
 	     CROSS APPLY OPENJSON(L.Properties)
 		 WITH ([QueryId] NVARCHAR(100) '$.QueryId') AS J
@@ -214,6 +218,7 @@ SELECT
   , X.[User]
   , X.[SessionId]
   , Q.[SqlStatement]
+  , X.[QueryDTO]
   , F.[PatientCount]
   , Success = CONVERT(BIT, CASE WHEN E.[Error] IS NULL THEN 1 ELSE 0 END)
   , [QueryStartTime] = X.[Timestamp]
@@ -243,7 +248,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_CountQueryDetail] AS
+CREATE OR ALTER VIEW [dbo].[v_CountQueryDetail] AS
 
 -- Top object level
 WITH X1 AS
@@ -418,7 +423,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_ConceptChildren] AS
+CREATE OR ALTER VIEW [dbo].[v_ConceptChildren] AS
 
 	SELECT
 	    [Timestamp]
@@ -445,7 +450,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_ConceptSearch] AS
+CREATE OR ALTER VIEW [dbo].[v_ConceptSearch] AS
 
 WITH X AS
 (
@@ -493,7 +498,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_Login] AS
+CREATE OR ALTER VIEW [dbo].[v_Login] AS
 
 WITH X AS
 (
@@ -548,7 +553,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_UnauthorizedLogin] AS
+CREATE OR ALTER VIEW [dbo].[v_UnauthorizedLogin] AS
 
 WITH X AS 
 (
@@ -590,7 +595,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_QuerySave] AS
+CREATE OR ALTER VIEW [dbo].[v_QuerySave] AS
 
 WITH X AS
 (
@@ -683,7 +688,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_QueryDelete] AS
+CREATE OR ALTER VIEW [dbo].[v_QueryDelete] AS
 
 WITH X AS 
 (
@@ -734,7 +739,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_DemographicsDatasetQuery] AS
+CREATE OR ALTER VIEW [dbo].[v_DemographicsDatasetQuery] AS
 
 WITH X AS
 (
@@ -821,7 +826,8 @@ FROM X
 		ON X.RequestId = F.RequestId
 	 LEFT JOIN E
 		ON X.RequestId = E.RequestId
-		
+GO
+
 /****** Object:  View [dbo].[v_ExportREDCap]    Script Date: 3/5/2020 4:32:55 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -835,7 +841,7 @@ GO
 
 
 
-CREATE VIEW [dbo].[v_ExportREDCap] AS
+CREATE OR ALTER VIEW [dbo].[v_ExportREDCap] AS
 
 WITH X AS
 (

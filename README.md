@@ -66,7 +66,7 @@ Note that the **LeafLogParser** is merely one way to solve this problem, and we 
 
 ## Requirements
 
-1) [.NET Core 2.2+ runtime](https://dotnet.microsoft.com/download) installed on the server the log files are stored. As this is typically the server hosting your Leaf API, this is likely already installed.
+1) [.NET Core 8+ runtime](https://dotnet.microsoft.com/download) installed on the server the log files are stored. As this is typically the server hosting your Leaf API, this is likely already installed.
 2) A database server with [MS SQL Server 2016+](https://www.microsoft.com/en-us/sql-server/default.aspx) installed. A newer version of SQL Server is necessary to take advantage of [JSON-parsing functionality](https://docs.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server?view=sql-server-2017) introduced in SQL Server 2016.
 
 ## Installation
@@ -77,12 +77,12 @@ Logs are transformed and written to a database table with column names matching 
 
 Create the database (adding arguments and environment-specific details as needed).
 ```sql
-CREATE DATABASE <LeafLogDB>
+CREATE DATABASE [LeafLogDB]
 ```
 
 Create the table and views under [src/db/build.sql](src/db/build.sql).
 ```sql
-USE <LeafLogDB>
+USE [LeafLogDB]
 GO
 
 CREATE TABLE [dbo].[UsageLog](
@@ -120,15 +120,15 @@ $ git clone https://github.com/uwrit/leaf-log-parser.git
 
 Build and publish the app.
 ```bash
-$ cd src/server/LeafLogParser
+$ cd src/server/leaf-log-parser
 $ dotnet publish -c Release
 ```
-> Note that you may need to add additional arguments, particularly if building in a Linux environment. See the [dotnet publish page](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore31) for more information.
+> Note that you may need to add additional arguments, particularly if building in a Linux environment. See the [dotnet publish page](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) for more information.
 
-This will output the published files to the `src/server/LeafLogParser/bin/Release/netcoreapp3.1` directory which can be executed with:
+This will output the published files to the `src/server/leaf-log-parser/bin/Release/net8.0` directory which can be executed with:
 
 ```bash
-$ cd bin/Release/netcoreapp3.1
+$ cd bin/Release/net8.0
 $ dotnet LeafLogParser.dll 
     -s "<log_directory_path>"
     -d "<sql_conn_string>"
